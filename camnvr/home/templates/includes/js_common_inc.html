@@ -1,0 +1,49 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="{{ static_server_url }}/static/js/script.js"></script>
+<script type="text/javascript">
+    function Uint8ToBase64(u8Arr) {
+        const CHUNK_SIZE = 0x8000; //arbitrary number
+        let index = 0;
+        const length = u8Arr.length;
+        let result = '';
+        let slice;
+        while (index < length) {
+            slice = u8Arr.subarray(index, Math.min(index + CHUNK_SIZE, length));
+            result += String.fromCharCode.apply(null, slice);
+            index += CHUNK_SIZE;
+        }
+        return btoa(result);
+    }
+
+    const API_HOST = "#";
+
+    function api(endpoint, method, data = undefined, success, fail) {
+        $.ajax({
+            type: method,
+            contentType: "application/json",
+            headers: {
+                'Accept': 'application/json,text/html'
+            },
+            data: JSON.stringify(data),
+            cache: false,
+            url: API_HOST + endpoint,
+            success: function (res) {
+                if (res.error) {
+                    if (res.msg === "Unauthorized") {
+                        window.location.href = API_HOST;
+                        sessionStorage.removeItem("token");
+                        return;
+                    }
+                    fail(res.msg);
+                } else {
+                    success(res);
+                }
+            },
+            fail: function (r) {
+                fail("Something went wrong. Please try again.")
+            }
+        });
+    }
+</script>

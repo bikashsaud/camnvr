@@ -1,0 +1,22 @@
+<script type="application/javascript">
+    function connect_ws(endpoint, onconnected, onmessage, onclose=undefined) {
+        const url = "ws://localhost:5005/"+endpoint;
+        const connection = new WebSocket(url);
+        connection.binaryType = 'arraybuffer';
+        console.log("Connected to websocket : " + url);
+        connection.onopen = function (event) {
+            onconnected(connection, event);
+        };
+        connection.onclose = function(event){
+            if(onclose){
+                onclose(event);
+            }else{
+                console.log("Connection closed. ", event);
+            }
+        };
+        connection.onmessage = function (event) {
+            onmessage(event);
+        };
+        return connection;
+    }
+</script>
