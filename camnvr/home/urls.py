@@ -1,9 +1,8 @@
 from django.urls import path
-from . import views
-from home.views import HomeIndexView
-from django.conf import settings
+
+from camnvr.home import views
 
 urlpatterns = [
-    path('', HomeIndexView.as_view()),
+    path('', views.HomeIndexView.as_view()),
     path('stream/<str:id>', views.stream, name='stream'),
 ]
