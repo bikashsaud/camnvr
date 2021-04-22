@@ -5,19 +5,28 @@ from service.camnvr_service import CamNVR
 from django.http import StreamingHttpResponse
 import cv2
  
-service = CamNVR()
+service = CamNVR() 
 service.start()
+
+
+# def index(reques):
+# 	return render(request, '../templates/home.html')
+
 
 class HomeIndexView(View):
 	template_name = "../templates/home.html"
 
 	def __init__(self):
 		super().__init__()
+		# self.service = CamNVR() 
+		# self.service.start()
 
 	def get(self, request, *args, **kwargs): 
 		context = {}
-		# context["img"] = frame
-		# print(frame)
+		# cameras = service.get_cameras()
+		# for cam_id, cam
+		context["img"] = service.get_frame(0)
+		print(context)
 		return render(request, self.template_name, context=context)
 
 		# def stream(request, id):

@@ -38,7 +38,7 @@ class ThreadSafeDict(dict):
         self._lock.release()
 
 
-class CamNVR:
+class CamNVR(object):
     _frames = ThreadSafeDict()
 
     def __init__(self):
@@ -54,7 +54,6 @@ class CamNVR:
             for cam_id, cam in self._cameras.items():
                 cam_id = str(cam_id)
                 print(cam["camUrl"])
-                self.gen_frames()
                 cap = cv2.VideoCapture(cam["camUrl"])
                 success, frame = cap.read()
                 if success:
@@ -76,6 +75,23 @@ class CamNVR:
                     frame = (b'--frame\r\n'
                              b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
                     yield frame
+                time.sleep(1)
+
+
+    def get_frame(self, cam_id):
+        print("inside get frame")
+        while True:
+            frame_detail = CamNVR._frames.get(str(cam_id), None)
+            print(frame_detail)
+            if frame_detail is not None:
+                print("In geeett fraamee")
+                frame = frame_detail.get("frame", None)
+                if frame is not None:
+                    ret, buffer = cv2.imencode('.jpg', frame)
+                    frame = buffer.tobytes()
+                    frame = (b'--frame\r\n'
+                             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                    return frame
                 time.sleep(1)
 
     def get_cameras(self):

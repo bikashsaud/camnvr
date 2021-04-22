@@ -9,9 +9,12 @@
         </div>
         <div class="row row-cols-1 row-cols-md-3" >
 	        <div class="container">
-	        		<img src="data:image/jpeg;base64 {{ img }}">
+	        		<img id="camera_id" >
 			    <br>
 			</div>
+            <div>
+                <img src="{{ img }}">
+            </div>
 		</div>
     </section>
 
@@ -24,7 +27,7 @@
 				console.log("Success");
                 const buffer = new Uint8Array(event.data);
                 const imgData = Uint8ToBase64(buffer);
-                $("#camera_id").attr("src", "data:image/jpeg;base64," + imgData);
+                $("#camera_id").attr("{{ img }}", "data:image/jpeg;base64," + imgData);
             };
 	</script>
 {% endblock extra_js %}
