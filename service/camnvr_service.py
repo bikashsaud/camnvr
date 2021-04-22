@@ -6,18 +6,6 @@ import time, base64
 # from service.camera_service import CameraService
 
 def get_cameras():
-    # getting camera info from repo
-    # camera_repo = CameraRepo()
-    # camera_service = CameraService(camera_repo)
-
-    # # list of camera details
-    # camera_ids = [cam.camera_id for cam in camera_service.get_cameras()] 
-    # camera_urls = [cam.camera_url for cam in camera_service.get_cameras()]
-    # camera_names = [cam.camera_name for cam in camera_service.get_cameras()]
-    # camera_details = list(zip(camera_ids, camera_urls, camera_names))
-    
-    # # dictionary of cameras with camera id as a key
-    # cameras = dict({a: {"camUrl": b, "camName": c} for a,b,c in camera_details})
     cameras = {
         "1": {
             "camId": "1",
@@ -66,6 +54,7 @@ class CamNVR:
             for cam_id, cam in self._cameras.items():
                 cam_id = str(cam_id)
                 print(cam["camUrl"])
+                self.gen_frames()
                 cap = cv2.VideoCapture(cam["camUrl"])
                 success, frame = cap.read()
                 if success:
@@ -74,9 +63,9 @@ class CamNVR:
                     q.append(data)
                     CamNVR._frames[cam_id] = data
                 time.sleep(1)
+                
 
     def gen_frames(self, cam_id):
-        print("hello im genrating frames")
         while True:
             frame_detail = CamNVR._frames.get(str(cam_id), None)
             if frame_detail is not None:
@@ -91,4 +80,5 @@ class CamNVR:
 
     def get_cameras(self):
         return self._cameras
+
 

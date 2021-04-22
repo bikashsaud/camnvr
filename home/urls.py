@@ -5,5 +5,4 @@ from django.conf import settings
 
 urlpatterns = [
     path('', HomeIndexView.as_view()),
-    path('stream/<str:id>', views.stream, name='stream'),
-]
+] 
