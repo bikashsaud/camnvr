@@ -61,6 +61,7 @@ class CamNVR(object):
                     data = {"cam_id": cam_id, "frame": frame}
                     q.append(data)
                     CamNVR._frames[cam_id] = data
+                    # print(CamNVR._frames.get(cam_id))
                 time.sleep(1)
                 
 
@@ -91,7 +92,7 @@ class CamNVR(object):
                     frame = buffer.tobytes()
                     frame = (b'--frame\r\n'
                              b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-                    return frame
+                    yield frame
                 time.sleep(1)
 
     def get_cameras(self):
