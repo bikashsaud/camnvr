@@ -5,29 +5,40 @@
 {% block content %}
     <!--White Block-->
     <section class="section">
-        <div>
-        </div> 
+        <div class="container-fluid text-center">
+            <h1>Welcome to CamNVR</h1>
+        </div>
         <div class="row row-cols-1 row-cols-md-3" >
+            <!-- <img style="-webkit-user-select: none;" src="{% url 'stream' %}" width="800" height="480"> -->
 	        <div class="container">
-	        		<img id="camera_id" >
-			    <br>
-			</div>
-            <div>
-                
+                <br>
+                <div class="row" id="contentPanel">
+
+                </div>
             </div>
 		</div>
     </section>
-
+ 
 
 {% endblock content %}
 
 {% block extra_js %}
 	<script type="text/javascript">
-		function (event) {
-				console.log("Success");
-                const buffer = new Uint8Array(event.data);
-                const imgData = Uint8ToBase64(buffer);
-                $("#camera_id").attr("{{ img }}", "data:image/jpeg;base64," + imgData);
-            };
-	</script>
+        var addCols = function (num){
+            for (var i=1;i<=num;i++) {
+                var myCol = $('<div class="col-sm-3 col-md-3 pb-2 ml-3 mr-3"></div>');
+                var myPanel = $('<div class="card card-outline-info" style="width: 18rem;" id="'+i+'Panel"><div class="card-block"><div class="card-title"><span>Camera #'+i+' </p><img class="card-img-top" src="{% url 'stream' %}""></div></div>');
+                myPanel.appendTo(myCol);
+                myCol.appendTo('#contentPanel');
+            }
+        
+        };
+
+        $(document).ready(function(){
+            num = 2
+            addCols(num);
+            return false;
+        });
+    </script>
+
 {% endblock extra_js %}

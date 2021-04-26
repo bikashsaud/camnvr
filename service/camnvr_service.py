@@ -7,7 +7,7 @@ import time, base64
 
 def get_cameras():
     cameras = {
-        "1": {
+        "1": { 
             "camId": "1",
             "camName": "Office Camera",
             "location": "Kathmandu",
@@ -17,6 +17,7 @@ def get_cameras():
             "camId": "2",
             "camName": "Office Camera",
             "location": "Pokhara",
+            # "camUrl": "rtsp://192.168.1.80:8080/h264_ulaw.sdp"
             "camUrl": "rtsp://192.168.43.2:8080/h264_ulaw.sdp"
             # "camUrl": "/home/ashok/Videos/663474b089b746309cc96fc56a7a135f.mp4"
         }
@@ -53,10 +54,11 @@ class CamNVR(object):
             print("hello im inside process")
             for cam_id, cam in self._cameras.items():
                 cam_id = str(cam_id)
-                print(cam["camUrl"])
+                # print(cam["camUrl"])
                 cap = cv2.VideoCapture(cam["camUrl"])
                 success, frame = cap.read()
                 if success:
+                    # frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
                     q = collections.deque(maxlen=1)
                     data = {"cam_id": cam_id, "frame": frame}
                     q.append(data)
@@ -71,6 +73,7 @@ class CamNVR(object):
             if frame_detail is not None:
                 frame = frame_detail.get("frame", None)
                 if frame is not None:
+                    # frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
                     ret, buffer = cv2.imencode('.jpg', frame)
                     frame = buffer.tobytes()
                     frame = (b'--frame\r\n'
@@ -82,12 +85,14 @@ class CamNVR(object):
     def get_frame(self, cam_id):
         print("inside get frame")
         while True:
+            print("camd id:", cam_id)
             frame_detail = CamNVR._frames.get(str(cam_id), None)
             print(frame_detail)
             if frame_detail is not None:
                 print("In geeett fraamee")
                 frame = frame_detail.get("frame", None)
                 if frame is not None:
+                    frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
                     ret, buffer = cv2.imencode('.jpg', frame)
                     frame = buffer.tobytes()
                     frame = (b'--frame\r\n'
