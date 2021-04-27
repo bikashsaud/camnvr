@@ -9,14 +9,6 @@ service = CamNVR()
 service.start() 
 
 
-class VideoCam(object):
-	_template_name = "../templates/home.html"
-
-	def __init__(self):
-		super().__init__()
-
-num_cameras = len(service.get_cameras())
-
 def gen(cam_id):
 	while True:
 		frame = service.get_frame(cam_id)
@@ -26,12 +18,14 @@ def gen(cam_id):
 
 def stream(request):
 	while True:
-		for num in range(1, num_cameras):
-			return StreamingHttpResponse(gen(num), content_type = 'multipart/x-mixed-replace; boundary=frame')
+		# for num in range(1, numof_cameras):
+		return StreamingHttpResponse(gen(2), content_type = 'multipart/x-mixed-replace; boundary=frame')
 
 def home(request):
-	context = {'number':num_cameras}
-	return render(request, '../templates/home.html', context=context)#, context=context)
+	numof_cameras = len(service.get_cameras())
+	template_name = "../templates/home.html"
+	context = {'number':numof_cameras}
+	return render(request, template_name, context=context)#, context=context)
 
 	# for n in range(1, self.num_cameras):
 	# 	resp = self.stream_response(n)
