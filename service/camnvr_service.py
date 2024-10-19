@@ -17,7 +17,7 @@ def get_cameras():
             "camId": "2",
             "camName": "Office Camera",
             "location": "Pokhara",
-            "camUrl": "rtsp://192.168.1.80:8080/h264_ulaw.sdp"
+            "camUrl": "rtsp://192.168.0.123:8000/h264_ulaw.sdp"
             # "camUrl": "rtsp://192.168.43.2:8080/h264_ulaw.sdp"
             # "camUrl": "/home/ashok/Videos/663474b089b746309cc96fc56a7a135f.mp4"
         }
